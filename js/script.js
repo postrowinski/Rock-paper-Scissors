@@ -41,20 +41,20 @@ document.addEventListener('DOMContentLoaded', function () {
             break;
         case 'ended':
             newGameButton.innerHTML = 'Zagraj jeszcze raz';
-            break;
+            computer.score = player.score = 0;
         case 'notStarted':
             newGameElement.style.display = 'block';
             playerPickElement.style.display = 'none';
             resultsTableElement.style.display = 'none';
-            break;
         }
     }
     
     function newGame() {
         player.name = prompt('Podaj swoje imię');
-        if (player.name !== '') {
+        if (player.name !== '') { 
             gameStatus = 'started';
             status();
+            playerPoints.innerHTML = computerPoints.innerHTML = 0;
             playerName.innerHTML = player.name;
         }
     }
@@ -86,9 +86,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     computer.score++;
                     computerPoints.innerHTML = computer.score;
                 }
+        
                 if (winner === 'none') {
                     computerResault.innerHTML = playerResault.innerHTML = 'Remis';
                 }
+        
             }
     
     function fullLogic() {
@@ -96,23 +98,29 @@ document.addEventListener('DOMContentLoaded', function () {
             Challenge(playerPicking, cpuRandomPick);
             playerPick.innerHTML = 'Player selection ' + playerPicking;
             computerPick.innerHTML = 'Computer selection ' + cpuRandomPick;
+            if (computer.score > 4 || player.score > 4) {
+                gameStatus = 'ended';              
+            }
     }
-    
-    // main program
+   
+    //Start Game
     status();
     newGameButton.addEventListener('click', function () {
         newGame();
-        playerPickPaper.addEventListener('click', function () {     
-            playerPicking = 'Paper';
-            fullLogic();
-        });
-        playerPickRock.addEventListener('click', function () {     
-            playerPicking = 'Rock';
-            fullLogic();
-        });
-        playerPickScissors.addEventListener('click', function () {     
-            playerPicking = 'Scissors';
-            fullLogic();
-        });
-    });  
+    }); 
+    playerPickPaper.addEventListener('click', function () {     
+        playerPicking = 'Paper';
+        fullLogic();
+        status();
+    });
+    playerPickRock.addEventListener('click', function () {     
+        playerPicking = 'Rock';
+        fullLogic();
+        status();
+    });
+    playerPickScissors.addEventListener('click', function () {     
+        playerPicking = 'Scissors';
+        fullLogic();
+        status();
+    });   
 });
