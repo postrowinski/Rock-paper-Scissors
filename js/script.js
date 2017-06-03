@@ -84,7 +84,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (winner === 'cpu') {
                     computerResault.innerHTML = 'Wygrywa Cpu';
                     computer.score++;
-                    computerPoints.innerHTML = player.score;
+                    computerPoints.innerHTML = computer.score;
+                }
+                if (winner === 'none') {
+                    computerResault.innerHTML = playerResault.innerHTML = 'Remis';
                 }
             }
     
@@ -99,8 +102,16 @@ document.addEventListener('DOMContentLoaded', function () {
     status();
     newGameButton.addEventListener('click', function () {
         newGame();
+        playerPickPaper.addEventListener('click', function () {     
+            playerPicking = 'Paper';
+            fullLogic();
+        });
         playerPickRock.addEventListener('click', function () {     
             playerPicking = 'Rock';
+            fullLogic();
+        });
+        playerPickScissors.addEventListener('click', function () {     
+            playerPicking = 'Scissors';
             fullLogic();
         });
     });  
