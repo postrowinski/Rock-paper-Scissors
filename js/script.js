@@ -1,61 +1,59 @@
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    //Object for PLAYER and COMPUTER
-    var player = {
-            name: '',
+    //All buttons
+    var button = {
+            newGame: document.getElementById('js-newGameButton'),
+            rock: document.getElementById('js-playerPick_rock'),
+            paper : document.getElementById('js-playerPick_paper'),
+            scissors : document.getElementById('js-playerPick_scissors')
+        },
+        player = {
+            getName: '',
+            setName: document.getElementById('js-playerName'),
+            setPoints : document.getElementById('js-playerPoints'),
+            setPick : document.getElementById('js-playerPick'),
+            resault : document.getElementById('js-playerResult'),
             score: 0
         },
         computer = {
+            setPick : document.getElementById('js-computerPick'),
+            setPoints : document.getElementById('js-computerPoints'),
+            resault : document.getElementById('js-computerResult'),
             score: 0
         },
-        //game status i can be: notStarted, started, ended
+        section = {
+            newGame: document.getElementById('js-newGameElement'),
+            buttons: document.getElementById('js-playerPickElement'),
+            resultsTable: document.getElementById('js-resultsTableElement')
+        },
         gameStatus = 'notStarted',
-        //Container elements
-        newGameElement = document.getElementById('js-newGameElement'),
-        playerPickElement = document.getElementById('js-playerPickElement'),
-        resultsTableElement = document.getElementById('js-resultsTableElement'),
-        //All buttons
-        newGameButton = document.getElementById('js-newGameButton'),
-        playerPickRock = document.getElementById('js-playerPick_rock'),
-        playerPickPaper = document.getElementById('js-playerPick_paper'),
-        playerPickScissors = document.getElementById('js-playerPick_scissors'),
-        //Player informations ext: name, points
-        playerName = document.getElementById('js-playerName'),
-        playerPoints = document.getElementById('js-playerPoints'),
-        playerPick = document.getElementById('js-playerPick'),
-        playerResault = document.getElementById('js-playerResult'),
-        //Computer informanions 
-        computerPick = document.getElementById('js-computerPick'),
-        computerResault = document.getElementById('js-computerResult'),
-        computerPoints = document.getElementById('js-computerPoints'),
         playerPicking = '';
-        ////////////////////////////
         
     function status() {
         switch (gameStatus) {
         case 'started':
-            newGameElement.style.display = 'none';
-            playerPickElement.style.display = 'block';
-            resultsTableElement.style.display = 'block';
+            section.newGame.style.display = 'none';
+            section.buttons.style.display = 'block';
+            section.resultsTable.style.display = 'block';
             break;
         case 'ended':
-            newGameButton.innerHTML = 'Zagraj jeszcze raz';
+            button.newGame.innerHTML = 'Zagraj jeszcze raz';
             computer.score = player.score = 0;
         case 'notStarted':
-            newGameElement.style.display = 'block';
-            playerPickElement.style.display = 'none';
-            resultsTableElement.style.display = 'none';
+            section.newGame.style.display = 'block';
+            section.buttons.style.display = 'none';
+            section.resultsTable.style.display = 'none';
         }
     }
     
     function newGame() {
-        player.name = prompt('Podaj swoje imię');
-        if (player.name !== '') { 
+        player.getName = prompt('Podaj swoje imię');
+        if (player.getName !== '') { 
             gameStatus = 'started';
             status();
-            playerPoints.innerHTML = computerPoints.innerHTML = 0;
-            playerName.innerHTML = player.name;
+            player.setPoints.innerHTML = computer.setPoints.innerHTML = 0;
+            player.setName.innerHTML = player.getName; 
         }
     }
     
@@ -66,59 +64,58 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     function Challenge(playerPicking, cpuRandomPick) {
-                var winner = 'player';
-                playerResault.innerHTML = computerResault.innerHTML = '';
+        var winner = 'player';
+        player.resault.innerHTML = computer.resault.innerHTML = '';
                 
-                if (playerPicking == cpuRandomPick) {
-                    winner = 'none';
-                } else if (cpuRandomPick === 'Paper' && playerPicking === 'Rock' || cpuRandomPick === 'Rock' && playerPicking === 'Scissors' || cpuRandomPick === 'Scissors' && playerPicking === 'Paper') {
-                    winner = 'cpu';
-                }
+        if (playerPicking === cpuRandomPick) {
+            winner = 'none';
+        } else if ((cpuRandomPick === 'Paper' && playerPicking === 'Rock') || (cpuRandomPick === 'Rock' && playerPicking === 'Scissors') || (cpuRandomPick === 'Scissors' && playerPicking === 'Paper')) {
+            winner = 'cpu';
+        }
                 
-                if (winner === 'player') {
-                    playerResault.innerHTML = 'Wygrywa gracz';
-                    player.score++;
-                    playerPoints.innerHTML = player.score;
-                }
+        if (winner === 'player') {
+            player.resault.innerHTML = 'Wygrywa gracz';
+            player.score++;
+            player.setPoints.innerHTML = player.score;
+        }
                 
-                if (winner === 'cpu') {
-                    computerResault.innerHTML = 'Wygrywa Cpu';
-                    computer.score++;
-                    computerPoints.innerHTML = computer.score;
-                }
+        if (winner === 'cpu') {
+            computer.resault.innerHTML = 'Wygrywa Cpu';
+            computer.score++;
+            computer.setPoints.innerHTML = computer.score;
+        }
         
-                if (winner === 'none') {
-                    computerResault.innerHTML = playerResault.innerHTML = 'Remis';
-                }
-        
-            }
+        if (winner === 'none') {
+            computer.resault.innerHTML = player.resault.innerHTML = 'Remis';
+        }  
+    }
     
     function fullLogic() {
         var cpuRandomPick = cpuPick();
-            Challenge(playerPicking, cpuRandomPick);
-            playerPick.innerHTML = 'Player selection ' + playerPicking;
-            computerPick.innerHTML = 'Computer selection ' + cpuRandomPick;
-            if (computer.score > 4 || player.score > 4) {
-                gameStatus = 'ended';              
-            }
+        Challenge(playerPicking, cpuRandomPick);
+        player.setPick.innerHTML = 'Player selection ' + playerPicking;
+        computer.setPick.innerHTML = 'Computer selection ' + cpuRandomPick;
+        if (computer.score > 4 || player.score > 4) {
+            gameStatus = 'ended';              
+        }
     }
    
     //Start Game
     status();
-    newGameButton.addEventListener('click', function () {
+    button.newGame.addEventListener('click', function () {
         newGame();
-    }); 
-    playerPickPaper.addEventListener('click', function () {     
+    });
+    button.paper.addEventListener('click', function () {     
         playerPicking = 'Paper';
         fullLogic();
         status();
     });
-    playerPickRock.addEventListener('click', function () {     
+    button.rock.addEventListener('click', function () {     
         playerPicking = 'Rock';
         fullLogic();
         status();
     });
-    playerPickScissors.addEventListener('click', function () {     
+    button.scissors.addEventListener('click', function () {     
         playerPicking = 'Scissors';
         fullLogic();
         status();
